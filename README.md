@@ -32,7 +32,7 @@ Installation
 For now this package is not available on Packagist so we will install it using git submodule.
 
 From the root directory of your Laravel project run:
-```bash
+```
     git submodule add git@git.assembla.com:twc-vmt.laravel-roles.git packages/damiantw/twc-laravel-role
 ```
 
@@ -60,6 +60,25 @@ Next add the ServiceProvider to the Package Service Providers in `config/app.php
         DamianTW\LaravelRoles\Providers\RoleServiceProvider::class,
 ```
 
+Add the HoldsAuthorities traits to the User model
+
+```php
+<?php
+
+namespace App;
+
+use DamianTW\LaravelRoles\Traits\HoldsAuthorities;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+    use HoldsAuthorities;
+    
+    //...
+```
+
 Running `php artisan vendor:publish` will install the role configuration file, database migrations, Role/RoleGroup 
 Eloquent models and RoleGroupsTableSeeder boilerplate to your application. At the very minimum you should install the
 migrations and Eloquent models with: `php artisan vendor:publish --tag=migrations --tag=models`.
@@ -74,7 +93,7 @@ A User's authority set pairs nicely with Laravel's built in Authorization tools 
 
 For example lets make a policy for a Post model:
 
-```bash
+```
     php artisan make:policy PostPolicy --model=Post
 ```
 
