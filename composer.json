@@ -1,0 +1,17 @@
+{
+    "name": "damiantw/twc-laravel-role",
+    "description": "Role based authentication and route protection for Laravel 5",
+    "authors": [
+        {
+            "name": "Damian Crisafulli",
+            "email": "damian.crisafulli@troyweb.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "DamianTW\\LaravelRoles\\": "src/"
+        }
+    }
+}
