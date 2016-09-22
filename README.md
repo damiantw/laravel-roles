@@ -29,7 +29,42 @@ administrative action.) while providing the convenience of common assignable aut
 Installation
 ------------
 
-@TODO
+For now this package is not available on Packagist so we will install it using git submodule.
+
+From the root directory of your Laravel project run:
+```bash
+    git submodule add git@git.assembla.com:twc-vmt.laravel-roles.git packages/damiantw/twc-laravel-role
+```
+
+We need to register the package for psr-4 autoload. Make sure your `composer.json` autoload block includes the package
+and run `composer dump-autoload`
+
+```json
+    "autoload": {
+        "classmap": [
+            "database"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "DamianTW\\LaravelRoles\\": "packages/damiantw/twc-laravel-role/src"
+        }
+    }
+```
+
+Next add the ServiceProvider to the Package Service Providers in `config/app.php`
+
+```php
+        /*
+         * Package Service Providers...
+         */
+        DamianTW\LaravelRoles\Providers\RoleServiceProvider::class,
+```
+
+Running `php artisan vendor:publish` will install the role configuration file, database migrations, Role/RoleGroup 
+Eloquent models and RoleGroupsTableSeeder boilerplate to your application. At the very minimum you should install the
+migrations and Eloquent models with: `php artisan vendor:publish --tag=migrations --tag=models`.
+
+Now just run the migrations =) `php artisan migrate`
 
 Usage
 -----
@@ -247,7 +282,7 @@ class RoleGroupsTableSeeder extends Seeder
               $user->id => [
                   'ViEW_USER'
               ]
-              // User roleGroup will only have VIEW_USER Authority 
+              // User roleGroup will only have the VIEW_USER authority 
           ]  
         );
     }
@@ -309,7 +344,7 @@ Authorities with the following roles will be created and associated with the gro
 
 ###### Wish List
 
-* Cache User Authority Set
+* Cache User authority set
 * hasAuthority Blade directive
 * Protect all of a controllers actions automatically using a convention
 * Better Exception handling
