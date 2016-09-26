@@ -79,6 +79,21 @@ class User extends Authenticatable
     //...
 ```
 
+If you plan to make use of the hasAuthority middleware you will need to add it to your `$routeMiddleware` array in `app/Http/Kernel.php`
+
+```php
+    protected $routeMiddleware = [
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'hasAuthority' => \DamianTW\LaravelRoles\Middleware\HasAuthority::class
+        // ...
+    ];
+```
+
 Running `php artisan vendor:publish` will install the role configuration file, database migrations, Role/RoleGroup 
 Eloquent models and RoleGroupsTableSeeder boilerplate to your application. At the very minimum you should install the
 migrations and Eloquent models with: `php artisan vendor:publish --tag=migrations --tag=models`.
@@ -196,13 +211,13 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        $this->authorize('update');
+        $this->authorize('update', $post);
         //...
     }
 
     public function destroy(Post $post)
     {
-        $this->authorize('delete');
+        $this->authorize('delete', $post);
         //...
     }
 }
