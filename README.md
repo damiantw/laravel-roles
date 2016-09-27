@@ -376,10 +376,34 @@ Authorities with the following roles will be created and associated with the gro
 * POST_UPDATE
 * POST_DESTROY
 
+### Blade Directives
+
+The following directives are available in blade views for convenience and code readability. 
+
+```
+
+@hasAuthority('VIEW_USER')
+    USER HAS AUTHORITY
+@endHasAuthority
+
+@hasAnyAuthority('VIEW_USER', 'CREATE_USER')
+    USER HAS AUTHORITY VIEW_USER OR CREATE_USER
+@endif
+{{-- @endif has the same function as @endHasAuthority. You can use either. --}}
+    
+{{-- Feel free to include conditional control structures. --}}
+@hasAllAuthorities('VIEW_USER, 'CREATE_USER')
+     USER HAS BOTH VIEW_USER AND CREATE_USER AUTHORITIES
+@else
+     USER DOES NOT HAVE VIEW_USER AND CREATE_USER AUTHORITIES
+@endHasAuthority     
+
+```
+
 ###### Wish List
 
 * Cache User authority set
-* hasAuthority Blade directive
+* ~~hasAuthority Blade directive~~
 * Protect all of a controllers actions automatically using a convention
 * Better Exception handling
 * Tests
