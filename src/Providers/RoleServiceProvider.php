@@ -5,9 +5,38 @@ namespace DamianTW\LaravelRoles\Providers;
 use Illuminate\Support\ServiceProvider;
 use DamianTW\LaravelRoles\Services\RoleService;
 use DamianTW\LaravelRoles\Services\RoleGroupSeederService;
+use Illuminate\Support\Facades\Blade;
 
 class RoleServiceProvider extends ServiceProvider
 {
+
+    /**
+     * Perform post-registration booting of services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        /*
+         * Blade Directives
+         */
+
+        Blade::directive('hasAuthority', function($expression) {
+            return str_replace('**AUTHORITY**', $expression, file_get_contents(__DIR__ . '/../Blade/hasAuthority.txt'));
+        });
+
+        Blade::directive('hasAnyAuthority', function($expression) {
+            return str_replace('**AUTHORITIES**', $expression, file_get_contents(__DIR__ . '/../Blade/hasAnyAuthority.txt'));
+        });
+
+        Blade::directive('hasAllAuthorities', function($expression) {
+            return str_replace('**AUTHORITIES**', $expression, file_get_contents(__DIR__ . '/../Blade/hasAllAuthorities.txt'));
+        });
+
+        Blade::directive('endHasAuthority', function($expression) {
+            return file_get_contents(__DIR__ . '/../Blade/endHasAuthority.txt');
+        });
+    }
 
     /**
      * Register the application services.
