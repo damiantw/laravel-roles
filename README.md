@@ -46,7 +46,7 @@ For now this package is not available on Packagist so we will install it using g
 
 From the root directory of your Laravel project run:
 ```
-    git submodule add git@git.assembla.com:twc-vmt.laravel-roles.git packages/damiantw/twc-laravel-role
+    git submodule add https://github.com/damiantw/laravel-roles.git packages/damiantw/twc-laravel-role
 ```
 
 We need to register the package for psr-4 autoload. Make sure your `composer.json` autoload block includes the package
