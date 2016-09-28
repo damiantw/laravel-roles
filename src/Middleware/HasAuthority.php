@@ -5,6 +5,10 @@ namespace DamianTW\LaravelRoles\Middleware;
 use Closure;
 use Illuminate\Auth\AuthenticationException;
 
+/**
+ * Class HasAuthority
+ * @package DamianTW\LaravelRoles
+ */
 class HasAuthority
 {
 

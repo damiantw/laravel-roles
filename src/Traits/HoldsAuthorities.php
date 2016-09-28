@@ -5,7 +5,7 @@ namespace DamianTW\LaravelRoles\Traits;
 use DamianTW\LaravelRoles\Services\RoleService;
 
 /**
- * Trait RoleProtected
+ * Trait HoldsAuthorities
  * @package DamianTW\LaravelRoles
  */
 trait HoldsAuthorities

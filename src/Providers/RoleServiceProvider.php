@@ -8,6 +8,10 @@ use DamianTW\LaravelRoles\Services\RoleGroupSeederService;
 use DamianTW\LaravelRoles\Services\RoleControllerService;
 use Illuminate\Support\Facades\Blade;
 
+/**
+ * Class RoleServiceProvider
+ * @package DamianTW\LaravelRoles
+ */
 class RoleServiceProvider extends ServiceProvider
 {
 
@@ -81,5 +85,6 @@ class RoleServiceProvider extends ServiceProvider
                 __DIR__ . '/../Seeders/' => database_path('seeds')
             ], 'seeds');
         }
+
     }
 }

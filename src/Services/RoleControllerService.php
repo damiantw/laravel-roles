@@ -2,6 +2,10 @@
 
 namespace DamianTW\LaravelRoles\Services;
 
+/**
+ * Class RoleControllerService
+ * @package DamianTW\LaravelRoles
+ */
 class RoleControllerService
 {
     public function buildAuthorityStringForControllerMethod($controllerClass, $controllerMethodName)

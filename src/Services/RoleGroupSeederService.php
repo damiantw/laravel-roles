@@ -2,6 +2,10 @@
 
 namespace DamianTW\LaravelRoles\Services;
 
+/**
+ * Class RoleGroupSeederService
+ * @package DamianTW\LaravelRoles
+ */
 class RoleGroupSeederService
 {
     protected $roleControllerService;

@@ -1,6 +1,8 @@
 {
-    "name": "damiantw/twc-laravel-role",
-    "description": "Role based authentication and route protection for Laravel 5",
+    "name": "damiantw/laravel-roles",
+    "description": "Role Based Authorization For Laravel 5",
+    "keywords": ["authorization", "laravel", "roles", "authorities"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Damian Crisafulli",
@@ -8,7 +10,14 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/auth": ">=5.2.0",
+        "illuminate/routing": ">=5.2.0",
+        "illuminate/support": ">=5.2.0",
+        "illuminate/contracts": ">=5.2.0",
+        "nesbot/carbon": "~1.21"
+    },
     "autoload": {
         "psr-4": {
             "DamianTW\\LaravelRoles\\": "src/"

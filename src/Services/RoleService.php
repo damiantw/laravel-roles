@@ -2,8 +2,23 @@
 
 namespace DamianTW\LaravelRoles\Services;
 
+use Carbon\Carbon;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
+
+/**
+ * Class RoleService
+ * @package DamianTW\LaravelRoles
+ */
 class RoleService
 {
+    protected $cache;
+
+    const BASE_CACHE_KEY = 'damiantw:laravelroles:';
+
+    function __construct(CacheFactory $cacheFactory)
+    {
+        $this->cache = $cacheFactory->store(config('role.cache_store'));
+    }
 
     public function userHasAuthority($user, $authority)
     {
@@ -38,14 +53,28 @@ class RoleService
 
     public function getAllUserAuthorities($user)
     {
-        return collect(
-            array_unique(
+        $userPrimaryKey = $user->getKeyName();
+        $cacheKey = self::BASE_CACHE_KEY . $user->$userPrimaryKey;
+
+        if(config('role.cache_authorities') && $this->cache->has($cacheKey)) {
+            return collect(json_decode($this->cache->get($cacheKey)));
+        }
+        else {
+            $authorities = array_unique(
                 array_merge(
-                    $this->getUserRoleGroupsAuthorities($user),
-                    $this->getUserRoleAuthorities($user)
+                $this->getUserRoleGroupsAuthorities($user),
+                $this->getUserRoleAuthorities($user)
                 ), SORT_STRING
-            )
-        );
+            );
+            if(config('role.cache_authorities')) {
+                $this->cache->add(
+                    $cacheKey,
+                    json_encode($authorities),
+                    Carbon::now()->addSeconds(config('role.cache_time_seconds'))
+                );
+            }
+            return collect($authorities);
+        }
     }
 
     public function getUserRoleGroupsAuthorities($user)

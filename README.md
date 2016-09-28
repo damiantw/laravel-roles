@@ -1,4 +1,4 @@
-Role Based Protection For Laravel 5
+Role Based Authorization For Laravel 5
 ===================================
 
 
@@ -46,7 +46,7 @@ For now this package is not available on Packagist so we will install it using g
 
 From the root directory of your Laravel project run:
 ```
-    git submodule add https://github.com/damiantw/laravel-roles.git packages/damiantw/twc-laravel-role
+    git submodule add https://github.com/damiantw/laravel-roles.git packages/damiantw/laravel-roles
 ```
 
 We need to register the package for psr-4 autoload. Make sure your `composer.json` autoload block includes the package
@@ -59,7 +59,7 @@ and run `composer dump-autoload`
         ],
         "psr-4": {
             "App\\": "app/",
-            "DamianTW\\LaravelRoles\\": "packages/damiantw/twc-laravel-role/src"
+            "DamianTW\\LaravelRoles\\": "packages/damiantw/laravel-roles/src"
         }
     }
 ```
@@ -263,7 +263,7 @@ Route::delete('/user/{user}', 'UserController@destroy')->middleware('hasAuthorit
  
 // Apply **AND** boolean logic by calling the hasAuthority middleware multiple times
 // Allowed if $user->hasAnyAuthority(['USER_VIEW','USER_SHOW']) **AND** $user->hasAuthority(['ADMIN']);
-Route::get('/user/{user}', 'UserController@show')->middleware('hasAuthority:USER_VIEW|USER_SHOW','hasAuthority:ADMIN');
+Route::get('/user/{user}', 'UserController@show')->middleware('hasAuthority:USER_VIEW|USER_SHOW', 'hasAuthority:ADMIN');
 
 //You can provide a second parameter to define the guard that should be used to retreive the authenticated user
 //The web guard will be used by default
@@ -461,6 +461,10 @@ The following directives are available in Blade views for convenience and code r
 @endHasAuthority     
 
 ```
+
+##### Disclaimer
+
+This package has only been tested with Laravel 5.3, though everything should work with Laravel 5.2.
 
 ###### Wish List
 

@@ -7,6 +7,10 @@ use DamianTW\LaravelRoles\Services\RoleControllerService;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Routing\Route;
 
+/**
+ * Class HasAuthorityController
+ * @package DamianTW\LaravelRoles
+ */
 class HasAuthorityController
 {
 
