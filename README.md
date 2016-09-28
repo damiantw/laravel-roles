@@ -289,6 +289,9 @@ class PostController extends Controller
 {
     function __construct() 
     {
+        // Optionally provide a guard parameter to hasAuthorityController. 
+        // The web guard will be used by default
+        // ex: $this->middleware('hasAuthorityController:api');   
         $this->middleware('hasAuthorityController');    
     }
     public function create(){}
