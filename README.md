@@ -468,8 +468,7 @@ This package has only been tested with Laravel 5.3, though everything should wor
 
 ###### Wish List
 
-* Cache User authority set
+* ~~Cache User authority set~~
 * ~~hasAuthority Blade directive~~
 * ~~Protect all of a controllers actions automatically using a convention~~
-* Better Exception handling
 * Tests
