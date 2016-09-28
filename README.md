@@ -7,6 +7,8 @@ Role Based Protection For Laravel 5
 3. [Installation](#installation)
 4. [Usage](#usage)
     * [Middleware](#middleware)
+        * [Route Middleware](#route-middleware)
+        * [Controller Middleware](#controller-middleware)
     * [API](#api)
     * [Seeding RoleGroups](#seeding-role-groups)
         * [Controller Based RoleGroup Seeding](#controller-based-role-group-seeding)
@@ -269,7 +271,7 @@ Route::put('/user/{user}', 'UserController@update')->middleware('hasAuthority:US
  
 ```
 
-#### Controller Middleware
+#### Controller Middleware <div id="controller-middleware"></div>
 
 You can easily protect all actions in a Controller by applying the hasAuthorityController Middleware in the Controller's
 constructor. When a User attempts to access a route for any of the Controller's actions they will be checked for a role
