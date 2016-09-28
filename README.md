@@ -1,7 +1,18 @@
 Role Based Protection For Laravel 5
 ===================================
 
-Purpose
+
+1. [Purpose](#purpose)
+2. [Concept](#concept)
+3. [Installation](#installation)
+4. [Usage](#usage)
+    * [Middleware](#middleware)
+    * [API](#api)
+    * [Seeding RoleGroups](#seeding-role-groups)
+        * [Controller Based RoleGroup Seeding](#controller-based-role-group-seeding)
+    * [Blade Directives](#blade-directives)    
+
+Purpose <div id="purpose"></div>
 -------
 
 This package aims to provide a granular, clearly defined and easily accessible authority set for association with the 
@@ -12,11 +23,11 @@ of the Post being edited?). A User's defined authority set can easily be factore
 a protection front using the provided API. We can then only allow users with the correct authorities access to actions 
 using the Laravel Authorization tools or the provided Middleware.
  
-Concept
+Concept <div id="concept"></div>
 -------
 
 Each user in the application has a defined authority set. An authority is nothing more then a unique string that
-hints at the permitted action. Authorities live inside roles, with each role holding exactly one authority value. 
+hints at a permitted action or a level of privilege. Authorities live inside roles, with each role holding exactly one authority value. 
 Roles can be associated with specific users or with any number of RoleGroups. RoleGroups provide a way to define 
 a common set of authorities that can be shared by many users. A user can be associated with many roleGroups. 
 
@@ -26,7 +37,7 @@ merged with all of the authorities associated with a user's roleGroups. This app
 handle special case scenarios (such as needing to offer a specific lower privileged user access to single 
 administrative action.) while providing the convenience of common assignable authority sets.
 
-Installation
+Installation <div id="installation"></div>
 ------------
 
 For now this package is not available on Packagist so we will install it using git submodule.
@@ -100,7 +111,7 @@ migrations and Eloquent models with: `php artisan vendor:publish --tag=migration
 
 Now just run the migrations =) `php artisan migrate`
 
-Usage
+Usage <div id="usage"></div>
 -----
 
 A User's authority set pairs nicely with Laravel's built in Authorization tools such as 
@@ -225,7 +236,7 @@ class PostController extends Controller
 ```
 
 
-### Middleware
+### Middleware <div id="middleware"></div>
 
 Creating a Policy for certain actions may seem unnecessary if the only requirement to complete the actions is to hold 
 certain authorities. For these situations you can make use of the provided Middleware to protect routes. If the user
@@ -252,7 +263,7 @@ Route::put('/user/{user}', 'UserController@update')->middleware('hasAuthority:US
  
 ```
 
-### API
+### API <div id="api"></div>
 
 The HoldsAuthorities Trait adds the following methods to the User model
 
@@ -280,7 +291,7 @@ $user->roleGroups;
 $user->roleGroups();
 ```
 
-### Seeding RoleGroups
+### Seeding RoleGroups <div id="seeding-role-groups"></div>
 
 You may want to provide a default set of RoleGroups with specific authorities for your application. This is a good use
 case for Laravel's seeding features. 
@@ -329,7 +340,7 @@ Roles for authorities that do not already exist and sync the roleGroup authority
 If your application does not allow for changing RoleGroup authority set definitions at runtime it can be useful to run
 this command as part of the deployment procedure. 
 
-#### Controller Based RoleGroup Seeding
+#### Controller Based RoleGroup Seeding <div id="controller-based-role-group-seeding"></div>
 
 You can also pass Controller classes as part of the RoleGroup authority definition. RoleGroupSeeder will create an
 authority for each public, non magic method in the controller following the convention `CONTROLLERSUBJECT_METHOD`.
@@ -376,7 +387,7 @@ Authorities with the following roles will be created and associated with the gro
 * POST_UPDATE
 * POST_DESTROY
 
-### Blade Directives
+### Blade Directives <div id="blade-directives"></div>
 
 The following directives are available in blade views for convenience and code readability. 
 
