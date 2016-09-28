@@ -5,6 +5,7 @@ namespace DamianTW\LaravelRoles\Providers;
 use Illuminate\Support\ServiceProvider;
 use DamianTW\LaravelRoles\Services\RoleService;
 use DamianTW\LaravelRoles\Services\RoleGroupSeederService;
+use DamianTW\LaravelRoles\Services\RoleControllerService;
 use Illuminate\Support\Facades\Blade;
 
 class RoleServiceProvider extends ServiceProvider
@@ -51,6 +52,10 @@ class RoleServiceProvider extends ServiceProvider
 
         $this->app->singleton('DamianTW\LaravelRoles\RoleSeederService', function ($app) {
             return new RoleGroupSeederService();
+        });
+
+        $this->app->singleton('DamianTW\LaravelRoles\RoleControllerService', function ($app) {
+            return new RoleControllerService();
         });
 
 

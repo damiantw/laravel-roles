@@ -4,6 +4,12 @@ namespace DamianTW\LaravelRoles\Services;
 
 class RoleGroupSeederService
 {
+    protected $roleControllerService;
+
+    function __construct(RoleControllerService $roleControllerService)
+    {
+        $this->roleControllerService = $roleControllerService;
+    }
 
     public function defineRoleGroupAuthorities(array $roleGroupRoleDefinitions)
     {
@@ -41,7 +47,6 @@ class RoleGroupSeederService
     private function createOrGetRoleIdsForController($controllerClass)
     {
         $controllerMethodNames = $this->getPublicClassMethodsNonInherited($controllerClass);
-        $controllerBaseName = $this->getAuthorityBaseName($controllerClass);
 
         $controllerRoleIds = [];
 
@@ -50,7 +55,7 @@ class RoleGroupSeederService
             if($this->isMagicMethod($controllerMethodName))
                 continue;
 
-            $authority = $this->buildAuthorityStringForControllerMethod($controllerBaseName, $controllerMethodName);
+            $authority = $this->roleControllerService->buildAuthorityStringForControllerMethod($controllerClass, $controllerMethodName);
 
             $controllerRoleIds[] = $this->createOrGetRoleIdByAuthority($authority);
         }
@@ -63,11 +68,6 @@ class RoleGroupSeederService
     {
         $roleClass = config('role.role_class');
         return $roleClass::firstOrCreate(['authority' => $authority])->id;
-    }
-
-    private function buildAuthorityStringForControllerMethod($controllerBaseName,$controllerMethodName)
-    {
-        return strtoupper(snake_case($controllerBaseName) . '_' . snake_case($controllerMethodName));
     }
 
     private function isMagicMethod($methodName)
@@ -90,8 +90,4 @@ class RoleGroupSeederService
         return $methods;
     }
 
-    private function getAuthorityBaseName($controllerClass)
-    {
-        return str_replace('Controller' , '' , class_basename(get_class(new $controllerClass)));
-    }
 }

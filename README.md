@@ -27,14 +27,14 @@ Concept <div id="concept"></div>
 -------
 
 Each user in the application has a defined authority set. An authority is nothing more then a unique string that
-hints at a permitted action or a level of privilege. Authorities live inside roles, with each role holding exactly one authority value. 
-Roles can be associated with specific users or with any number of RoleGroups. RoleGroups provide a way to define 
-a common set of authorities that can be shared by many users. A user can be associated with many roleGroups. 
+hints at a permitted action or a level of privilege. Authorities live inside Roles, with each Role holding exactly one 
+authority value. Roles can be associated with specific Users or with any number of RoleGroups. RoleGroups provide a way 
+to define a common set of authorities that can be shared by many users. A User can be associated with many RoleGroups. 
 
 
-A user's final defined authorities consists of the set of authorities from the roles directly associated with the user 
-merged with all of the authorities associated with a user's roleGroups. This approach allows for the flexibility to
-handle special case scenarios (such as needing to offer a specific lower privileged user access to single 
+A user's final defined authorities consists of the set of authorities from the Roles directly associated with the user 
+merged with all of the authorities associated with a User's RoleGroups. This approach allows for the flexibility to
+handle special case scenarios (such as needing to offer a specific lower privileged User access to single 
 administrative action.) while providing the convenience of common assignable authority sets.
 
 Installation <div id="installation"></div>
@@ -90,7 +90,8 @@ class User extends Authenticatable
     //...
 ```
 
-If you plan to make use of the hasAuthority middleware you will need to add it to your `$routeMiddleware` array in `app/Http/Kernel.php`
+If you plan to make use of the hasAuthority or hasAuthorityController Middleware you will need to add them to your 
+`$routeMiddleware` array in `app/Http/Kernel.php`
 
 ```php
     protected $routeMiddleware = [
@@ -100,7 +101,8 @@ If you plan to make use of the hasAuthority middleware you will need to add it t
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'hasAuthority' => \DamianTW\LaravelRoles\Middleware\HasAuthority::class
+        'hasAuthority' => \DamianTW\LaravelRoles\Middleware\HasAuthority::class,
+        'hasAuthorityController' => \DamianTW\LaravelRoles\Middleware\HasAuthorityController::class
         // ...
     ];
 ```
@@ -114,7 +116,7 @@ Now just run the migrations =) `php artisan migrate`
 Usage <div id="usage"></div>
 -----
 
-A User's authority set pairs nicely with Laravel's built in Authorization tools such as 
+A User's authority set pairs nicely with Laravel's built in authorization tools such as 
 [Policies](https://laravel.com/docs/5.3/authorization#creating-policies).
 
 For example lets make a policy for a Post model:
@@ -123,7 +125,7 @@ For example lets make a policy for a Post model:
     php artisan make:policy PostPolicy --model=Post
 ```
 
-We can then query a User's authority set within our Policy methods. This creates a front protection that ensures a user 
+We can then query a User's authority set within our Policy methods. This creates a front protection that ensures a User 
 has the authority to participate in this action at all. We can then provide additional logic to determine if this 
 specific instance of the action should be allowed.
 
@@ -181,8 +183,8 @@ class PostPolicy
 }
 ```
 
-After registering our policy in the AuthService Provider, our PostController can make use of the authorize() Controller 
-helper. If the policy check does not pass an `Illuminate\Auth\Access\AuthorizationException` will be thrown causing the 
+After registering our policy in the AuthServiceProvider, our PostController can make use of the authorize() Controller 
+helper. If the Policy check does not pass an `Illuminate\Auth\Access\AuthorizationException` will be thrown causing the 
 default Laravel exception handler to issue a HTTP 403 status code as the response. 
 
 ```php
@@ -239,9 +241,14 @@ class PostController extends Controller
 ### Middleware <div id="middleware"></div>
 
 Creating a Policy for certain actions may seem unnecessary if the only requirement to complete the actions is to hold 
-certain authorities. For these situations you can make use of the provided Middleware to protect routes. If the user
-does not have the required authorities for a route an `Symfony\Component\HttpKernel\Exception\HttpException` will be thrown 
-with a status code of 401. 
+a certain a authority(ies). For these situations you can make use of the provided hasAuthority and hasAuthorityController 
+Middleware. 
+
+#### Route Middleware <div id="route-middleware"></div>
+
+Individual routes can be protected by applying the hasAuthority Middleware. If the user does not have the required 
+authority(ies) for a route an `Symfony\Component\HttpKernel\Exception\HttpException` will be thrown with a status code 
+of 401. 
 
 ```php
 
@@ -249,19 +256,58 @@ with a status code of 401.
 Route::put('/user/{user}', 'UserController@update')->middleware('hasAuthority:USER_UPDATE');
 
 // More then one authority can be specificed using the pipe.
-// If the user has the authority USER_UPDATE **OR** USER_EDIT they will be allowed access to the route
-Route::put('/user/{user}', 'UserController@update')->middleware('hasAuthority:USER_UPDATE|USER_EDIT');
+// If the user has the authority USER_DESTROY **OR** USER_MODERATOR they will be allowed access to the route
+Route::delete('/user/{user}', 'UserController@destroy')->middleware('hasAuthority:USER_DESTROY|USER_MODERATOR');
  
 // Apply **AND** boolean logic by calling the hasAuthority middleware multiple times
-// Allowed if $user->hasAnyAuthority(['USER_UPDATE','USER_EDIT']) **AND** $user->hasAnyAuthority(['ADMIN']);
-Route::put('/user/{user}', 'UserController@update')->middleware('hasAuthority:USER_UPDATE|USER_EDIT','hasAuthority:ADMIN');
+// Allowed if $user->hasAnyAuthority(['USER_VIEW','USER_SHOW']) **AND** $user->hasAuthority(['ADMIN']);
+Route::get('/user/{user}', 'UserController@show')->middleware('hasAuthority:USER_VIEW|USER_SHOW','hasAuthority:ADMIN');
 
-
- //You can provide a second parameter to define the guard that should be used to retreive the authenticated user
- //The web guard will be used by default
- Route::put('/user/{user}', 'UserController@update')->middleware('hasAuthority:USER_UPDATE,api');
+//You can provide a second parameter to define the guard that should be used to retreive the authenticated user
+//The web guard will be used by default
+Route::put('/user/{user}', 'UserController@update')->middleware('hasAuthority:USER_UPDATE,api');
  
 ```
+
+#### Controller Middleware
+
+You can easily protect all actions in a Controller by applying the hasAuthorityController Middleware in the Controller's
+constructor. When a User attempts to access a route for any of the Controller's actions they will be checked for a role
+following the convention `CONTROLLERSUBJECT_METHOD`. If the user does not have the required authority for a route an 
+`Symfony\Component\HttpKernel\Exception\HttpException` will be thrown with a status code of 401. 
+
+Take the following Controller for example: 
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+class PostController extends Controller
+{
+    function __construct() 
+    {
+        $this->middleware('hasAuthorityController');    
+    }
+    public function create(){}
+    public function store(){}
+    public function show(){}
+    public function edit(){}
+    public function update(){}
+    public function destroy(){}
+}
+```
+
+Each route will be checked with an authority.
+
+| ACTION  | AUTHORITY   |
+|---------|-------------|
+| create  | POST_CREATE |
+| store   | POST_STORE  |
+| show    | POST_SHOW   |
+| edit    | POST_EDIT   |
+| update  | POST_UPDATE |
+| destroy | POST_DELETE |
 
 ### API <div id="api"></div>
 
@@ -296,7 +342,7 @@ $user->roleGroups();
 You may want to provide a default set of RoleGroups with specific authorities for your application. This is a good use
 case for Laravel's seeding features. 
 
-This package provides a RoleGroupsTable Seeder boilerplate and a RoleGroupSeeder Facade which can be used to clearly 
+This package provides a RoleGroupsTableSeeder boilerplate and a RoleGroupSeeder Facade which can be used to clearly 
 define the default authority sets for your application's RoleGroups. 
 
 ```php
@@ -322,12 +368,12 @@ class RoleGroupsTableSeeder extends Seeder
                   'UPDATE_USER',
                   'DELETE_USER'
               ],
-              // Admin roleGroup will have authorities: VIEW_USER, CREATE_USER, UPDATE_USER, DELETE_USER
+              // Admin RoleGroup will have authorities: VIEW_USER, CREATE_USER, UPDATE_USER, DELETE_USER
               
               $user->id => [
                   'ViEW_USER'
               ]
-              // User roleGroup will only have the VIEW_USER authority 
+              // User RoleGroup will only have the VIEW_USER authority 
           ]  
         );
     }
@@ -335,7 +381,7 @@ class RoleGroupsTableSeeder extends Seeder
 ```
 
 When we run `php arisian db:seed --class=RoleGroupsTableSeeder` the RoleGroupSeeder Facade will automatically create
-Roles for authorities that do not already exist and sync the roleGroup authority set definitions as you defined them.
+Roles for authorities that do not already exist and sync the RoleGroup authority set definitions as you defined them.
 
 If your application does not allow for changing RoleGroup authority set definitions at runtime it can be useful to run
 this command as part of the deployment procedure. 
@@ -389,7 +435,7 @@ Authorities with the following roles will be created and associated with the gro
 
 ### Blade Directives <div id="blade-directives"></div>
 
-The following directives are available in blade views for convenience and code readability. 
+The following directives are available in Blade views for convenience and code readability. 
 
 ```
 
@@ -415,6 +461,6 @@ The following directives are available in blade views for convenience and code r
 
 * Cache User authority set
 * ~~hasAuthority Blade directive~~
-* Protect all of a controllers actions automatically using a convention
+* ~~Protect all of a controllers actions automatically using a convention~~
 * Better Exception handling
 * Tests
