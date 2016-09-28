@@ -42,27 +42,9 @@ administrative action.) while providing the convenience of common assignable aut
 Installation <div id="installation"></div>
 ------------
 
-For now this package is not available on Packagist so we will install it using git submodule.
+Install via **Composer**
 
-From the root directory of your Laravel project run:
-```
-    git submodule add https://github.com/damiantw/laravel-roles.git packages/damiantw/laravel-roles
-```
-
-We need to register the package for psr-4 autoload. Make sure your `composer.json` autoload block includes the package
-and run `composer dump-autoload`
-
-```json
-    "autoload": {
-        "classmap": [
-            "database"
-        ],
-        "psr-4": {
-            "App\\": "app/",
-            "DamianTW\\LaravelRoles\\": "packages/damiantw/laravel-roles/src"
-        }
-    }
-```
+`composer require damiantw/laravel-roles`
 
 Next add the ServiceProvider to the Package Service Providers in `config/app.php`
 
