@@ -312,7 +312,7 @@ Each route will be checked with an authority.
 | show    | POST_SHOW   |
 | edit    | POST_EDIT   |
 | update  | POST_UPDATE |
-| destroy | POST_DELETE |
+| destroy | POST_DESTROY |
 
 ### API <div id="api"></div>
 
