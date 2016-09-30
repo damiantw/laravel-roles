@@ -51,15 +51,15 @@ class RoleServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('DamianTW\LaravelRoles\RoleService', function ($app) {
-            return new RoleService();
+            return new RoleService($app->make('Illuminate\Contracts\Cache\Factory'));
         });
 
         $this->app->singleton('DamianTW\LaravelRoles\RoleSeederService', function ($app) {
-            return new RoleGroupSeederService();
+            return new RoleGroupSeederService($app->make(RoleService::class));
         });
 
         $this->app->singleton('DamianTW\LaravelRoles\RoleControllerService', function ($app) {
-            return new RoleControllerService();
+            return new RoleControllerService;
         });
 
 
