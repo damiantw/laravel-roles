@@ -55,7 +55,7 @@ class RoleServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton('DamianTW\LaravelRoles\RoleSeederService', function ($app) {
-            return new RoleGroupSeederService($app->make(RoleService::class));
+            return new RoleGroupSeederService($app->make(RoleControllerService::class));
         });
 
         $this->app->singleton('DamianTW\LaravelRoles\RoleControllerService', function ($app) {
