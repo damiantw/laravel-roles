@@ -22,7 +22,7 @@ class RoleControllerService
 
     private function getAuthorityBaseName($controllerClass)
     {
-        return str_replace('Controller' , '' , class_basename(get_class(new $controllerClass)));
+        return str_replace('Controller' , '' , class_basename($controllerClass));
     }
 
 }
