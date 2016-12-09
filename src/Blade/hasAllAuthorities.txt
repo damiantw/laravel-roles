@@ -1,1 +1,1 @@
-<?php if(Illuminate\Support\Facades\Auth::user()->hasAllAuthorities([**AUTHORITIES**])): ?>
+<?php if(Illuminate\Support\Facades\Auth::check() && Illuminate\Support\Facades\Auth::user()->hasAllAuthorities([**AUTHORITIES**])): ?>
