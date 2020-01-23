@@ -11,7 +11,7 @@ class RoleControllerService
     public function buildAuthorityStringForControllerMethod($controllerClass, $controllerMethodName)
     {
         $authorityBaseName = $this->getAuthorityBaseName($controllerClass);
-        return strtoupper(snake_case($authorityBaseName) . '_' . snake_case($controllerMethodName));
+        return strtoupper(Str::snake($authorityBaseName) . '_' . Str::snake($controllerMethodName));
     }
 
     public function getAuthorityFromActionName($actionName)
