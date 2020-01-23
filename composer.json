@@ -1,5 +1,5 @@
 {
-    "name": "dgeowils/laravel-roles",
+    "name": "damiantw/laravel-roles",
     "description": "Role Based Authorization For Laravel 6",
     "keywords": ["authorization", "laravel", "roles", "authorities"],
     "license": "MIT",

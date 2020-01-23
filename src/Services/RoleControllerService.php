@@ -2,6 +2,8 @@
 
 namespace DamianTW\LaravelRoles\Services;
 
+use Illuminate\Support\Str;
+
 /**
  * Class RoleControllerService
  * @package DamianTW\LaravelRoles
