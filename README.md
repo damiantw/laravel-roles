@@ -1,4 +1,4 @@
-Role Based Authorization For Laravel 5
+Role Based Authorization For Laravel 6
 ===================================
 
 
@@ -18,8 +18,8 @@ Purpose <div id="purpose"></div>
 -------
 
 This package aims to provide a granular, clearly defined and easily accessible authority set for association with the 
-Laravel User model. Out of the box Laravel offers some very [powerful tools](https://laravel.com/docs/5.3/authorization 
-"Laravel 5.3 Authorization Docs") for handling checks on whether a user can complete a certain action. Often the
+Laravel User model. Out of the box Laravel offers some very [powerful tools](https://laravel.com/docs/6.x/authorization
+"Laravel 6.x Authorization Docs") for handling checks on whether a user can complete a certain action. Often the
 determining factor is the result of a simple boolean calculation (ex. does the id of a user match the user_id 
 of the Post being edited?). A User's defined authority set can easily be factored into these calculations to provide 
 a protection front using the provided API. We can then only allow users with the correct authorities access to actions 
@@ -44,7 +44,7 @@ Installation <div id="installation"></div>
 
 Install via **Composer**
 
-`composer require damiantw/laravel-roles`
+`composer require DamianTW/laravel-roles`
 
 Next add the ServiceProvider to the Package Service Providers in `config/app.php`
 
@@ -101,7 +101,7 @@ Usage <div id="usage"></div>
 -----
 
 A User's authority set pairs nicely with Laravel's built in authorization tools such as 
-[Policies](https://laravel.com/docs/5.3/authorization#creating-policies).
+[Policies](https://laravel.com/docs/6.x/authorization#creating-policies).
 
 For example lets make a policy for a Post model:
 
@@ -446,7 +446,7 @@ The following directives are available in Blade views for convenience and code r
 
 ##### Disclaimer
 
-This package has only been tested with Laravel 5.3, though everything should work with Laravel 5.2.
+This package has only been tested with Laravel 6.12.0, though everything should work with Laravel 6.*.
 
 ###### Wish List
 

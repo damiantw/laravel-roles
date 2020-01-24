@@ -1,12 +1,16 @@
 {
     "name": "damiantw/laravel-roles",
-    "description": "Role Based Authorization For Laravel 5",
+    "description": "Role Based Authorization For Laravel 6",
     "keywords": ["authorization", "laravel", "roles", "authorities"],
     "license": "MIT",
     "authors": [
         {
             "name": "Damian Crisafulli",
             "email": "damian.crisafulli@troyweb.com"
+        },
+        {
+            "name": "Dan Wilson",
+            "email": "dan.wilson@troyweb.com"
         }
     ],
     "minimum-stability": "dev",
