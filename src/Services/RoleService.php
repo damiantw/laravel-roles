@@ -70,7 +70,7 @@ class RoleService
                 $this->cache->add(
                     $cacheKey,
                     json_encode($authorities),
-                    Carbon::now()->addSeconds(config('role.cache_time_seconds'))
+                    Carbon::now()->addSeconds((int) config('role.cache_time_seconds'))
                 );
             }
             return collect($authorities);
